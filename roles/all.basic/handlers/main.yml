@@ -1,0 +1,13 @@
+---
+# handlers file for all.basic
+  - name: stop_ntp
+    service: 
+      name: ntpd 
+      state: stopped
+    notify: sync_ntp
+  - name: sync_ntp
+    command: ntpdate -q time.google.com
+  - name: restart_ntp
+    service: 
+      name: ntpd 
+      state: restarted

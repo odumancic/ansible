@@ -1,0 +1,23 @@
+---
+# defaults file for all.basic
+basic_packages:
+ - unison240
+ - bind-utils
+ - openssh-clients
+ - lsof
+ - dmidecode
+ - wget
+ - mailx
+ - perl
+ - vim-enhanced
+ - logrotate
+ - setup
+ - sudo
+ - openldap
+ - net-tools
+ - mlocate
+enable_required_services:
+ - sshd
+ - crond
+disable_unused_services:
+ - firewalld

@@ -1,0 +1,35 @@
+---
+# tasks file for all.basic
+  - name: Ensure NTP (for time synchronization) is installed.
+    yum:
+      name: ntp
+      state: present
+    notify: stop_ntp
+  - name: Ensure NTP is running
+    service:
+      name: ntpd
+      state: started
+      enabled: yes
+  - name: add several packages
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ basic_packages }}"
+  - name: disable unused services
+    service:
+      name: "{{ item }}"
+      state: stopped
+    with_items: "{{ disable_unused_services }}"
+  - name: enable required services
+    service:
+      name: "{{ item }}"
+      state: started
+    with_items: "{{ enable_required_services }}"
+  - name: disable SELinux
+    selinux:
+      state: disabled
+  - name: create scripts directory
+    file:
+      path: /usr/local/scripts
+      state: directory
+      mode: 0755
