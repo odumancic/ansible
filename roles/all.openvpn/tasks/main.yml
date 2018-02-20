@@ -1,0 +1,28 @@
+---
+# tasks file for all.openvpn
+
+- name: Install packages
+  yum: 
+    name: openvpn 
+    state: present
+
+- name: Copy server configuration
+  template: src=client.conf.j2 dest=/etc/openvpn/client.conf
+            owner=root mode=0640
+  notify: restart openvpn
+
+- name: Copy server's certificates
+  template: src={{ item }}.j2 dest=/etc/openvpn/{{ item }} owner=root mode=0600
+  with_items:
+    - ca.crt
+    - client.key
+    - client.crt
+    - dh2048.pem
+  notify: restart openvpn
+
+- name: Enable and start openvpn
+  service: 
+    name: openvpn@{{ openvpn_server_name }} 
+    state: started 
+    enabled: yes
+#  when: '"ansible_distribution_version" ==  "7"'
